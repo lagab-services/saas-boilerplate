@@ -3,7 +3,7 @@ import {BadgePercent, ChevronLeft} from 'lucide-react';
 
 import {cn} from "@/lib/utils"
 import {buttonVariants} from "@/components/ui/button"
-import UserAuthForm from "@/components/user-auth-form";
+import UserAuthForm from "@/components/forms/user-auth-form";
 
 const Login = () => {
     return (

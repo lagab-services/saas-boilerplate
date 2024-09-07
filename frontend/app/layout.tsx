@@ -3,6 +3,7 @@ import {Inter} from "next/font/google";
 import "./globals.css";
 import NextAuthProvider from '@/app/_next_auth_provider';
 import {ReactNode} from 'react';
+import {Toaster} from '@/components/ui/toaster';
 
 const inter = Inter({subsets: ["latin"]});
 
@@ -20,6 +21,7 @@ export default function RootLayout({children}: Readonly<{
         <NextAuthProvider>
             {children}
         </NextAuthProvider>
+        <Toaster/>
         </body>
         </html>
     );

@@ -1,5 +1,5 @@
 import Link from "next/link"
-import ForgotPasswordForm from '@/components/forgot-password-form';
+import ForgotPasswordForm from '@/components/forms/forgot-password-form';
 
 const ForgotPassword = () => {
     return (

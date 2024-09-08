@@ -7,6 +7,7 @@ import {promisify} from 'node:util';
 import {randomBytes} from 'node:crypto';
 import mail from '@adonisjs/mail/services/main';
 import {DateTime} from 'luxon';
+import env from '#start/env';
 
 @inject()
 export default class AuthController {
@@ -53,8 +54,11 @@ export default class AuthController {
       user.fullName = name
       await this.authService.registerWithAuth(user)
     }
+    const token = await User.accessTokens.create(user, ['*'], {
+      expiresIn: env.get('JWT_EXPIRY'),
+    })
 
-    return response.json({user})
+    return response.json({user, token})
   }
 
   public async forgotPassword({request, response}: HttpContext) {

@@ -58,6 +58,7 @@ export const authOptions: NextAuthOptions = {
                         }),
                     })
                     const data = await res.json()
+                    user.token = {token: data.token.token};
 
                     if (res.ok) {
                         return true

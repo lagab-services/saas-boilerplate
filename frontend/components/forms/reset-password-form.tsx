@@ -9,10 +9,11 @@ import {zodResolver} from '@hookform/resolvers/zod';
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from '@/components/ui/form';
 import {useToast} from '@/hooks/use-toast';
 import {PasswordInput} from '@/components/ui/password-input';
+import {useRouter, useSearchParams} from 'next/navigation';
 
 
 const formSchema = z.object({
-    password: z.string(),
+    password: z.string().min(8).max(32),
     confirmPassword: z.string()
 }).refine(data => data.password === data.confirmPassword, {
     message: "The passwords must match.",
@@ -28,25 +29,28 @@ const ResetPasswordForm = ({className, ...props}: ResetPasswordFormProps) => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const form = useForm<ResetPasswordFormValue>({
         resolver: zodResolver(formSchema),
-    });
+    })
     const {toast} = useToast()
+    const searchParams = useSearchParams()
+    const token = searchParams.get('token')
+    const router = useRouter()
+
     const onSubmit = async (data: ResetPasswordFormValue) => {
         //forgot password
         setIsLoading(true)
-        console.log("submit")
         const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/auth/reset-password', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({password: data.password}),
+            body: JSON.stringify({password: data.password, token: token,}),
         })
 
         setIsLoading(false)
         if (response.ok) {
+            router.push('/login')
             return toast({
-                title: "Check your email",
-                description: "We sent you a login link. Be sure to check your spam too.",
+                description: "your password has been successfully changed",
             })
         }
 

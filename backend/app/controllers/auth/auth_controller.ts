@@ -3,14 +3,20 @@ import User from "#models/user";
 import {loginValidator, registerValidator} from "#validators/auth";
 import AuthService from '#services/auth/auth_service';
 import {inject} from '@adonisjs/core';
+import {promisify} from 'node:util';
+import {randomBytes} from 'node:crypto';
+import mail from '@adonisjs/mail/services/main';
+import {DateTime} from 'luxon';
 
 @inject()
 export default class AuthController {
-  constructor(protected  authService: AuthService) {}
+  constructor(protected authService: AuthService) {
+  }
+
   async login({request, response}: HttpContext) {
     const {email, password} = await request.validateUsing(loginValidator)
 
-    const { token, user } = await this.authService.login(email, password)
+    const {token, user} = await this.authService.login(email, password)
 
     return response.ok({
       token: token,
@@ -36,8 +42,8 @@ export default class AuthController {
     return response.created(user)
   }
 
-  public async googleAuth({ request, response }: HttpContext) {
-    const { email, name } = request.only(['email', 'name'])
+  public async googleAuth({request, response}: HttpContext) {
+    const {email, name} = request.only(['email', 'name'])
 
     let user = await User.findBy('email', email)
 
@@ -48,7 +54,58 @@ export default class AuthController {
       await this.authService.registerWithAuth(user)
     }
 
-    return response.json({ user })
+    return response.json({user})
   }
+
+  public async forgotPassword({request, response}: HttpContext) {
+    const email = request.input('email')
+    const user = await User.findBy('email', email)
+
+    if (!user) {
+      return response.badRequest({error: 'User not found'})
+    }
+
+    // Generate token
+    const token = (await promisify(randomBytes)(32)).toString('hex')
+
+    user.resetPasswordToken = token
+    user.resetPasswordTokenExpires = DateTime.now().plus({hours: 1}) // 1 hour of validity
+    await user.save()
+
+    // Envoyer un email avec le lien de réinitialisation
+    const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${token}`
+    await mail.use().send((message) => {
+      message
+        .to(user.email)
+        .subject('Password Reset')
+        .htmlView('emails/reset_password', {resetLink, name: user.fullName})
+    })
+
+    return response.ok({message: 'Reset link sent to your email.'})
+  }
+
+  public async resetPassword({request, response}: HttpContext) {
+    const {password, token} = request.all()
+
+    // Find user with valid token
+    const user = await User.query()
+      .where('resetPasswordToken', token)
+      .where('resetPasswordTokenExpires', '>', DateTime.now().toString())
+      .first()
+
+    if (!user) {
+      return response.badRequest({error: 'Token is invalid or has expired'})
+    }
+
+    //Update password of user
+    user.password = password
+    user.resetPasswordToken = null
+    user.resetPasswordTokenExpires = null
+
+    await user.save()
+
+    return response.ok({message: 'Password successfully reset.'})
+  }
+
 
 }

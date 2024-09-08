@@ -28,7 +28,6 @@ const ForgotPasswordForm = ({className, ...props}: ForgotPasswordFormProps) => {
     const {toast} = useToast()
     const onSubmit = async (data: ForgotPasswordFormValue) => {
         setIsLoading(true)
-        console.log("submit")
         const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/auth/forgot-password', {
             method: 'POST',
             headers: {

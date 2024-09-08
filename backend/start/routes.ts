@@ -15,7 +15,9 @@ router.group(() => {
   router.group(() => {
     router.post('/register', [AuthController, 'register'])
     router.post('/login', [AuthController, 'login'])
-    router.post('/google', [AuthController, 'googleAuth']).use(middleware.auth())
+    router.post('/google', [AuthController, 'googleAuth'])
+    router.post('/forgot-password', [AuthController, 'forgotPassword'])
+    router.post('/reset-password', [AuthController, 'resetPassword'])
     router.post('/logout', [AuthController, 'logout']).use(middleware.auth())
   }).prefix('auth')
   router.get('/me', async ({auth, response}) => {

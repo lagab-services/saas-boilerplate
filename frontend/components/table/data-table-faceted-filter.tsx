@@ -6,7 +6,7 @@ import {Button} from "@/components/ui/button"
 import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator,} from "@/components/ui/command"
 import {Popover, PopoverContent, PopoverTrigger,} from "@/components/ui/popover"
 import {Separator} from "@/components/ui/separator"
-import {CheckIcon, PlusCircle} from 'lucide-react';
+import {CheckIcon, ListFilter} from 'lucide-react';
 import {Option} from '@/types/table';
 
 
@@ -27,7 +27,7 @@ export const DataTableFacetedFilter = <TData, TValue>({
         <Popover>
             <PopoverTrigger asChild>
                 <Button variant="outline" size="sm" className="h-8 border-dashed">
-                    <PlusCircle className="mr-2 size-4"/>
+                    <ListFilter className="mr-2 size-4"/>
                     {title}
                     {selectedValues?.size > 0 && (
                         <>

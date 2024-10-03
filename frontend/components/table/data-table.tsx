@@ -49,6 +49,7 @@ const DataTable = <TData, >({
                                 <TableRow
                                     key={row.id}
                                     onClick={() => onRowClick?.(row.original)}
+                                    className={onRowClick && "hover:bg-muted cursor-pointer"}
                                     data-state={row.getIsSelected() && 'selected'}
                                 >
                                     {row.getVisibleCells().map((cell) => (

@@ -87,7 +87,7 @@ const Sidebar = ({
                             onClick={() => setIsCollapsed((prev) => !prev)}
                             size='icon'
                             variant='outline'
-                            className='absolute -right-3 top-1/2 z-50 hidden rounded-full md:inline-flex w-6 h-6'
+                            className='absolute -right-3 top-4 z-50 hidden rounded-full md:inline-flex w-6 h-6'
                         >
                             <ChevronsLeft
                                 className={`h-4 w-4 ${isCollapsed ? 'rotate-180' : ''}`}

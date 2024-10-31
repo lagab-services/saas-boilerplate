@@ -5,6 +5,7 @@ import NextAuthProvider from '@/app/_next_auth_provider';
 import {ReactNode} from 'react';
 import {Toaster} from '@/components/ui/toaster';
 import {SheetProvider} from '@/contexts/sheet-context';
+import ThemeProvider from '@/components/layout/theme-provider';
 
 const inter = Inter({subsets: ["latin"]});
 
@@ -40,12 +41,19 @@ export default function RootLayout({children}: Readonly<{
     return (
         <html lang="en">
         <body className={inter.className}>
-        <NextAuthProvider>
-            <SheetProvider>
-                {children}
-            </SheetProvider>
-        </NextAuthProvider>
-        <Toaster/>
+        <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+        >
+            <NextAuthProvider>
+                <SheetProvider>
+                    {children}
+                </SheetProvider>
+            </NextAuthProvider>
+            <Toaster/>
+        </ThemeProvider>
         </body>
         </html>
     );

@@ -52,7 +52,7 @@ const UserList = ({usersPromise}: UsersListProps) => {
             <DataTable table={table} onRowClick={(row) => {
 
                 openSheet(
-                    <SheetContent className="md:w-1/2 md:max-w-full " overlay="bg-white/80">
+                    <SheetContent className="md:w-1/2 md:max-w-full " overlay="bg-white/80 dark:bg-background/80">
                         <SheetHeader>
                             <SheetTitle>Contenu dynamique</SheetTitle>
                             <SheetDescription>

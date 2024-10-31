@@ -7,6 +7,7 @@ import UserList from '@/app/(protected)/(dashboard)/dashboard/user-list';
 import {SearchParams} from '@/types/table';
 import {fetchUsers} from '@/app/(protected)/(dashboard)/dashboard/_lib/queries';
 import {searchParamsSchema} from '@/app/(protected)/(dashboard)/dashboard/_lib/validations';
+import ModeToggle from '@/components/layout/mode-toggle';
 
 export interface IndexPageProps {
     searchParams: SearchParams
@@ -42,9 +43,13 @@ const DashBoardPage = ({searchParams}: IndexPageProps) => {
                             </BreadcrumbItem>
                         </BreadcrumbList>
                     </Breadcrumb>
+                    <div className="ml-auto flex items-center space-x-4">
+                        <ModeToggle/>
+                    </div>
+
                 </header>
             </div>
-            <div className="bg-gray-50 p-6 space-y-5">
+            <div className="bg-gray-50 dark:bg-background  p-6 space-y-5">
                 <div className='mb-2 flex items-center justify-between space-y-2'>
                     <div className={cn(
                         ' py-4 md:overflow-hidden'
